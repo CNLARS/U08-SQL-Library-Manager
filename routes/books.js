@@ -1,4 +1,5 @@
 const express = require("express");
+const { RangeNotSatisfiable } = require("http-errors");
 const router = express.Router();
 
 const Book = require("../models").Book;
@@ -15,7 +16,7 @@ function asyncHandler(cb){
             //     console.error(`Errors Discovered: ${errors.length}, Error(s): `, errors);
             // }
             res.status(500).send(error);
-            // console.error(error);
+            next(error);
         }
     }
 }
@@ -24,7 +25,7 @@ function asyncHandler(cb){
 
 //Full list of books:
 router.get("/", asyncHandler( async (req, res) => {
-    Book.findAll().then( () => {
+    await Book.findAll().then( () => {
         res.render("books/index", { book: {}, title: "Library Books" });
         });
     })
@@ -32,7 +33,7 @@ router.get("/", asyncHandler( async (req, res) => {
 
 //Create add new book entry:
 router.get("/new", (req, res) => {
-    res.render("books/new-book", { books: {}, title: "Add New Book" });
+    res.render("books/new-book", { book: {}, title: "Add New Book" });
 });
 
 //Route for book details by id
@@ -42,7 +43,8 @@ router.get(":id", asyncHandler( async (req, res) => {
         if(book){
             res.render("books/update-book", { book: {book}, title: "Edit Book Details" } );
         } else {
-            res.status(404).render("books/page_not_found", { book: {}, title: "Page Not Found" });
+            console.log("?");
+            // res.status(404).render("books/page_not_found", { book: {}, title: "Page Not Found" });
         }
     })
 );
