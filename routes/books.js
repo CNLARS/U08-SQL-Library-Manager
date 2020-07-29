@@ -25,9 +25,8 @@ function asyncHandler(cb){
 
 //Full list of books:
 router.get("/", asyncHandler( async (req, res) => {
-    await Book.findAll().then( () => {
-        res.render("books/index", { book: {}, title: "Library Books" });
-        });
+    const books = await Book.findAll({ order: [["title", "DESC"]]});
+        res.render("books/index", { books, title: "Library Books" });
     })
 );
 
@@ -39,25 +38,22 @@ router.get("/new", (req, res) => {
 //Route for book details by id
 router.get(":id", asyncHandler( async (req, res) => {
     //Shows update book form or 404
-    const book = await Book.findByPk(req.params.id)     
+    const book = await Book.findByPk(req.params.id);     
         if(book){
-            res.render("books/update-book", { book: {book}, title: "Edit Book Details" } );
+            res.render("books/update-book", { book, title: book.title } );
         } else {
-            console.log("?");
-            // res.status(404).render("books/page_not_found", { book: {}, title: "Page Not Found" });
+            console.log("Testing404");
+            res.status(404).render("books/page-not-found", { book: {}, title: "Page Not Found" });
         }
     })
 );
 
 router.post("/", asyncHandler( async (req, res) => {
     //Creates a new book to the database:
-    const book = await Book.create();
-    // console.log(req.body);
-    res.redirect("/books/" + books.id);
+    const book = await Book.create(req.body);
+    res.redirect("/books/" + book.id);
     })
 );
-
-
 
 router.post("/books/:id", asyncHandler( async (req, res) => {
     //Updates book info in db:

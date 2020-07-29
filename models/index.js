@@ -3,6 +3,7 @@ const Sequelize = require("sequelize");
 //Connects database to the SQL constructor
 const sequelize = new Sequelize({
     dialect: 'sqlite',
+    // storage: "../library.db"
 });
 
 const db = {
