@@ -22,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/books', books);
 
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -32,10 +33,18 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-console.log("app.js Testing123");
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  
+  if(res.status === 404){
+//     Note: Reference to the Practice Error Handling in Express Workshop
+    //  to avoid route specific rendering:
+        console.log("Testing404 Not Found");
+    res.render("books/page-not-found", { book: {}, title: "Page Not Found" });
+  } else {
+        // render the error page
+            console.log("Error Testing123");
+        res.status(err.status || 500).render('error');
+  }
+  
 });
 
 module.exports = app;

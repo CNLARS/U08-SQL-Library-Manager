@@ -1,16 +1,10 @@
 "use strict";
 const Sequelize = require("sequelize");
-module.exports = (sequelize) => {
 
+module.exports = (sequelize) => {
     class Book extends Sequelize.Model {}
     //Book model properties and their data types:
     Book.init({
-        id: {
-            type: Sequelize.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-        },
-        
         title: {
             type: Sequelize.STRING,
                 allowNull: false,
@@ -37,17 +31,12 @@ module.exports = (sequelize) => {
                 },
         },
 
-        genre: {
-            type: Sequelize.STRING,
-        },
-
-        year: {
-            type: Sequelize.INTEGER,
-        },
+        genre: Sequelize.STRING,
+            year: Sequelize.INTEGER,
 
     }, { paranoid: true, sequelize }
     
     );
 
     return Book;
-}
+};

@@ -1,5 +1,5 @@
 const express = require("express");
-const { RangeNotSatisfiable } = require("http-errors");
+// const { RangeNotSatisfiable } = require("http-errors");
 const router = express.Router();
 
 const Book = require("../models").Book;
@@ -10,58 +10,50 @@ function asyncHandler(cb){
     return async(req, res, next) => {
         try {
             await cb(req, res, next)
-        } catch (error){
-            // if (error.name === "SequelizeValidationError") {
-            //     const errors = error.errors.map(err => err.message);
-            //     console.error(`Errors Discovered: ${errors.length}, Error(s): `, errors);
-            // }
-            res.status(500).send(error);
+    } catch (error){
             next(error);
         }
     }
 }
 
-//GET:
+//GET routes:
 
-//Full list of books:
+//Index list of books:
 router.get("/", asyncHandler( async (req, res) => {
-    const books = await Book.findAll({ order: [["title", "DESC"]]});
-        res.render("books/index", { books, title: "Library Books" });
+    const books = await Book.findAll();
+    // // console.log(books); { order: [["title", "ASC"]]}
+        res.render("books/index", { books, title: "Library Book List" });
     })
 );
 
-//Create add new book entry:
+//Form to add new book entry:
 router.get("/new", (req, res) => {
     res.render("books/new-book", { book: {}, title: "Add New Book" });
 });
 
-//Route for book details by id
-router.get(":id", asyncHandler( async (req, res) => {
-    //Shows update book form or 404
+//Route for book details to update/edit by id
+router.get("/:id", asyncHandler( async (req, res) => {
     const book = await Book.findByPk(req.params.id);     
         if(book){
             res.render("books/update-book", { book, title: book.title } );
-        } else {
-            console.log("Testing404");
-            res.status(404).render("books/page-not-found", { book: {}, title: "Page Not Found" });
         }
     })
 );
 
+//Creates a new book to the database:
 router.post("/", asyncHandler( async (req, res) => {
-    //Creates a new book to the database:
     const book = await Book.create(req.body);
     res.redirect("/books/" + book.id);
     })
 );
 
-router.post("/books/:id", asyncHandler( async (req, res) => {
+router.post("/books/:id", asyncHandler( async (req, res, next) => {
     //Updates book info in db:
     res.redirect("/books");
     })
 );
 
-router.get("/books/:id/delete", asyncHandler( async (req, res) => {
+router.get("/books/:id/delete", asyncHandler( async (req, res, next) => {
     /*Prompts to delete/destroy a book db entry;
         safety net - paranoid = true:
     It can be helpful to create a new “test” book to delete. */
@@ -70,10 +62,13 @@ router.get("/books/:id/delete", asyncHandler( async (req, res) => {
     })
 );
 
-router.post("/books/:id/delete", asyncHandler( async (req, res) => {
-      /*Prompts to delete/destroy a book db entry;
+//POST routes:
+
+/*Prompts to delete/destroy a book db entry;
         safety net - paranoid = true:
     It can be helpful to create a new “test” book to delete. */
+router.post("/books/:id/delete", asyncHandler( async (req, res, next) => {
+      
 
     res.redirect("/books");
     })
@@ -86,6 +81,5 @@ Global error handler in app.js using Express middleware logs error to the consol
  and renders an error message in the browser if the user
   navigates to a non-existent book :id or experiences an unexpected error.
 
-Note: Reference to the Practice Error Handling in Express Workshop
-         to avoid route specific rendering.
+
  */
