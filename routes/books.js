@@ -17,10 +17,8 @@ const Book = require("../models").Book;
 
 //GET Index list of books:
     router.get("/", asyncHandler( async (req, res) => {
-        const books = await Book.findAll();
-        // const books = await Book.findAll({ order: [["title", "ASC"]]});
-        // // console.log(books); 
-            res.render("books/index", { book: {books}, title: "Library Book List" });
+        const books = await Book.findAll({ order: [["title", "ASC"]]});
+            res.render("books/index", { books, title: "Library Book List" });
     }));
 
 //GET Form to add new book entry:
@@ -39,11 +37,11 @@ const Book = require("../models").Book;
         const book = await Book.findByPk(req.params.id);     
             if(book){
                 console.log("Display Individual Book");
-                //Create pug file to render book details!
-            }
-            else {
-        //If !Book.findByPk(req.params.id), no book found:
-                throw error;  
+                //Create pug file to render book details?
+                res.render("books/update-book", { book, title: book.title })
+            } else {
+            //If !Book.findByPk(req.params.id), no book found:
+                res.status(404).send(error);
             }
     }));
 

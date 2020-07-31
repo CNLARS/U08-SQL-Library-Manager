@@ -1,4 +1,3 @@
-"use strict";
 const Sequelize = require("sequelize");
 
 module.exports = (sequelize) => {
@@ -10,7 +9,7 @@ module.exports = (sequelize) => {
                 allowNull: false,
                 validate: {
                     notEmpty: {
-                        msg: "Judge not a book by it's cover, but please do provide a title.",
+                        msg: "Please do include a title.",
                     },
                     notNull: {
                         msg: "Book must have title.",
@@ -23,10 +22,10 @@ module.exports = (sequelize) => {
                 allowNull: false,
                 validate: {
                     notEmpty: {
-                        msg: "Author name is requested, and cannot be empty",
+                        msg: "Author name is requested, and cannot be empty.",
                     },
                     notNull: {
-                        msg: "Every Book needs an Author, every Author needs a book",
+                        msg: "Every Book needs an Author, every Author needs a book.",
                     },
                 },
         },
@@ -34,7 +33,7 @@ module.exports = (sequelize) => {
         genre: Sequelize.STRING,
             year: Sequelize.INTEGER,
 
-    }, { paranoid: true, sequelize }
+    }, { sequelize }
     
     );
 
