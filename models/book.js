@@ -3,7 +3,7 @@ const Sequelize = require("sequelize");
 
 module.exports = (sequelize) => {
     class Book extends Sequelize.Model {}
-    //Book model properties and their data types:
+//Book model properties and their data types:
     Book.init({
         title: {
             type: Sequelize.STRING,
@@ -13,7 +13,7 @@ module.exports = (sequelize) => {
                         msg: "Judge not a book by it's cover, but please do provide a title.",
                     },
                     notNull: {
-                        msg: 'Book must have title; even "Untitled" is a title.',
+                        msg: "Book must have title.",
                     },
                 },
         },
@@ -23,10 +23,10 @@ module.exports = (sequelize) => {
                 allowNull: false,
                 validate: {
                     notEmpty: {
-                        msg: "Cite your source; name the author!",
+                        msg: "Author name is requested, and cannot be empty",
                     },
                     notNull: {
-                        msg: "Book needs an author to give credit where credit is due.",
+                        msg: "Every Book needs an Author, every Author needs a book",
                     },
                 },
         },

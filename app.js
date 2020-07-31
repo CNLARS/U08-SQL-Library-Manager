@@ -29,6 +29,13 @@ app.use(function(req, res, next) {
 });
 
 // error handler
+
+/* 
+Global error handler in app.js using Express middleware logs error to the console
+ and renders an error message in the browser if the user
+  navigates to a non-existent book :id or experiences an unexpected error.
+ */
+
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
@@ -39,12 +46,11 @@ app.use(function(err, req, res, next) {
     //  to avoid route specific rendering:
         console.log("Testing404 Not Found");
     res.render("books/page-not-found", { book: {}, title: "Page Not Found" });
-  } else {
-        // render the error page
-            console.log("Error Testing123");
-        res.status(err.status || 500).render('error');
-  }
-  
+        } else {
+                // render the error page
+                    console.log("Error Testing123");
+                res.status(err.status || 500).render('error');
+        }
 });
 
 module.exports = app;
