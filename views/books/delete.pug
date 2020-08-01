@@ -1,0 +1,13 @@
+//delete form from practice with SQL ORM using Express:
+extends ../layout
+
+block content
+  h1= "Is that your final answer?"
+  p 
+    | Are you certain about deleting 
+    em= book.title
+    | ?
+  form(action="/books/" + book.id + "/delete", method="post")
+    a(href="/books/") No. Return to Library. 
+    | 
+    input(type="submit", value = "100% Certain")

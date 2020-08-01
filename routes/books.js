@@ -27,12 +27,24 @@ const Book = require("../models").Book;
     });
 
 //POST Creates a new book to the db via form:
-    router.post("/", asyncHandler( async (req, res) => {
-        const book = await Book.create(req.body);
-        res.redirect("/books/" + book.id);
+    router.post("/new", asyncHandler( async (req, res) => {
+        let book;
+            try{
+                book = await Book.create(req.body);
+                res.redirect("/books/" + book.id);
+            } catch(error){
+                if(error.name === "SequelizeValidationError") {
+                    book = await Book.build(req.body);
+                    res.render("books/new-book", { book, errors: error.errors, title: "New Book" })
+                } else {
+                    throw error; //to asyncHandler to catch
+                } 
+
+            }
+        
     }));
 
-//GET Route for individual book by id:
+//GET Route for individual book by id to view/edit details:
     router.get("/:id", asyncHandler( async (req, res) => {
         const book = await Book.findByPk(req.params.id);     
             if(book){
@@ -41,30 +53,46 @@ const Book = require("../models").Book;
                 res.render("books/update-book", { book, title: book.title })
             } else {
             //If !Book.findByPk(req.params.id), no book found:
-                res.status(404).send(error);
+                res.sendStatus(404);
             }
     }));
 
-//GET Edits book details:
-    router.get("/:id/edit", asyncHandler( async (req, res) => {
-        const book = await Book.findByPk(req.params.id);     
-            res.render("books/update-book", { book, title: book.title } );
-    }));
+// //GET Edits book details:
+//     router.get("/:id/edit", asyncHandler( async (req, res) => {
+//         const book = await Book.findByPk(req.params.id);     
+//             res.render("books/update-book", { book, title: book.title } );
+//     }));
 
 //POST Updates changes to book:
-    router.post("books/:id/edit", asyncHandler(async (req, res) => {
-        res.redirect("/books/");
+    router.post("books/:id", asyncHandler(async (req, res) => {
+        let book;
+            try{
+                book = await Book.findByPk(req.params.id);
+                if(book){
+                    await book.update(req.body);
+                    res.redirect("/books/");
+                } else {
+                    res.sendStatus(404);
+                }  
+            } catch(error){
+                if(error.name === "SequelizeValidationError"){
+                    book = await Book.build(req.body);
+                    book.id = req.params.id;
+                    res.render("books/update-book", {book, errors: error.errors, title: "Update Book" });
+                }
+            }
+              
     }));
 
 //GET book to delete:
     router.get("/:id/delete", asyncHandler( async (req, res) => {
-        /*Prompts to delete/destroy a book entry;
-            [db safety net: paranoid = true]
-        Note: It can be helpful to create a new “test” book to delete. */
-        console.log("Create pug file for delete view to render!");
-            res.redirect("/books/"); //Temporary Route 
-        //Construction Route:
-            //res.render("books/delete", { book: {}, title: "Delete Book From Library" });
+        /*Prompts to delete/destroy a book entry*/
+        const book = await Book.findByPk(req.params.id);
+            if(book){
+                res.render("books/delete", { book, title: "Delete Book From Library" });
+            } else {
+                res.sendStatus(404);
+            }
     }));
 
 
@@ -72,7 +100,13 @@ const Book = require("../models").Book;
     It can be helpful to create a new “test” book to delete. */
     
     router.post("books/:id/delete", asyncHandler( async (req, res) => {
-        res.redirect("/books");
+        const book = await Book.findByPk(req.params.id);
+            if(book){
+                await book.destroy();
+                    res.redirect("/books");
+            } else {
+                res.sendStatus(404);
+            }
     }));
 
 module.exports = router;
