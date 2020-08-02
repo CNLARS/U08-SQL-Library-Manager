@@ -49,7 +49,7 @@ app.use(function(err, req, res, next) {
         } else {
                 // render the error page
                     console.log("Error Testing123");
-                res.status(err.status || 500).render('error', {error});
+                res.status(err.status || 500).render('error');
         }
 });
 
