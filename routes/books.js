@@ -35,7 +35,7 @@ const Book = require("../models").Book;
             } catch(error){
                 if(error.name === "SequelizeValidationError") {
                     book = await Book.build(req.body);
-                    res.render("books/new-book", { book, errors: error.errors, title: "New Book" })
+                    res.render("books/form-error", { book, errors: error.errors})
                 } else {
                     throw error; //to asyncHandler to catch
                 } 
@@ -53,7 +53,7 @@ const Book = require("../models").Book;
                 res.render("books/update-book", { book, title: book.title })
             } else {
             //If !Book.findByPk(req.params.id), no book found:
-                res.sendStatus(404);
+                res.status(404).send("404 Not Found; not here, not lost; not yet made!");
             }
     }));
 
@@ -64,7 +64,7 @@ const Book = require("../models").Book;
 //     }));
 
 //POST Updates changes to book:
-    router.post("books/:id", asyncHandler(async (req, res) => {
+    router.post("/:id", asyncHandler(async (req, res) => {
         let book;
             try{
                 book = await Book.findByPk(req.params.id);
@@ -72,13 +72,15 @@ const Book = require("../models").Book;
                     await book.update(req.body);
                     res.redirect("/books/");
                 } else {
-                    res.sendStatus(404);
+                    res.status(404).send("404 Not Found; not here, not lost; not yet made!");
                 }  
             } catch(error){
                 if(error.name === "SequelizeValidationError"){
                     book = await Book.build(req.body);
                     book.id = req.params.id;
                     res.render("books/update-book", {book, errors: error.errors, title: "Update Book" });
+                } else {
+                    res.status(404).send("404 Not Found; not here, not lost; not yet made!");
                 }
             }
               
@@ -91,7 +93,7 @@ const Book = require("../models").Book;
             if(book){
                 res.render("books/delete", { book, title: "Delete Book From Library" });
             } else {
-                res.sendStatus(404);
+                res.status(404).send("404 Not Found; not here, not lost; not yet made!");
             }
     }));
 
@@ -99,13 +101,13 @@ const Book = require("../models").Book;
 /*POST route to delete/destroy a book db entry; safety net - paranoid = true:
     It can be helpful to create a new “test” book to delete. */
     
-    router.post("books/:id/delete", asyncHandler( async (req, res) => {
+    router.post("/:id/delete", asyncHandler( async (req, res) => {
         const book = await Book.findByPk(req.params.id);
             if(book){
                 await book.destroy();
                     res.redirect("/books");
             } else {
-                res.sendStatus(404);
+                res.status(404).send("404 Not Found; not here, not lost; not yet made!");
             }
     }));
 
