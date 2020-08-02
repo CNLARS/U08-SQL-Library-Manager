@@ -35,7 +35,7 @@ const Book = require("../models").Book;
             } catch(error){
                 if(error.name === "SequelizeValidationError") {
                     book = await Book.build(req.body);
-                    res.render("books/form-error", { book, errors: error.errors})
+                    res.render("books/form-error", { book: {book}, errors: error.errors})
                 } else {
                     throw error; //to asyncHandler to catch
                 } 
