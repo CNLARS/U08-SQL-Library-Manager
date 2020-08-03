@@ -1,13 +1,13 @@
 extends ../layout
 
 block content
-  title New Book
-  h1 New Book
+  title Form Error
+  h1 Book Details
   form(action="/books/new", method="post")
-    h2.error Malfunction. Need Input:
+    h2.error Error, please include the following:
     ul.error
-      li Author is required
-      li Name is required
+      li.error Author is required
+      li.error Name is required
     p
       label(for='title') Title 
       input#title(name='title' type='text')

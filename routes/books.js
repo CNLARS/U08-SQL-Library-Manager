@@ -35,7 +35,7 @@ const Book = require("../models").Book;
             } catch(error){
                 if(error.name === "SequelizeValidationError") {
                     book = await Book.build(req.body);
-                    res.render("books/form-error", { book: {book}, errors: error.errors})
+                    res.render("books/form-error", { book, errors: error.errors})
                 } else {
                     throw error; //to asyncHandler to catch
                 } 
@@ -53,7 +53,7 @@ const Book = require("../models").Book;
                 res.render("books/update-book", { book, title: book.title })
             } else {
             //If !Book.findByPk(req.params.id), no book found:
-                res.status(404).send("404 Not Found; not here, not lost; not yet made!");
+                res.status(404).send("ERROR: 404 Not Found");
             }
     }));
 
@@ -72,15 +72,15 @@ const Book = require("../models").Book;
                     await book.update(req.body);
                     res.redirect("/books/");
                 } else {
-                    res.status(404).send("404 Not Found; not here, not lost; not yet made!");
+                    res.status(404).send("ERROR: 404 Not Found");
                 }  
             } catch(error){
                 if(error.name === "SequelizeValidationError"){
                     book = await Book.build(req.body);
                     book.id = req.params.id;
-                    res.render("books/update-book", {book, errors: error.errors, title: "Update Book" });
+                    res.render("books/form-error", {book, errors: error.errors, title: "Update Book" });
                 } else {
-                    res.status(404).send("404 Not Found; not here, not lost; not yet made!");
+                    res.status(404).send("ERROR: 404 Not Found");
                 }
             }
               
@@ -93,7 +93,7 @@ const Book = require("../models").Book;
             if(book){
                 res.render("books/delete", { book, title: "Delete Book From Library" });
             } else {
-                res.status(404).send("404 Not Found; not here, not lost; not yet made!");
+                res.status(404).send("ERROR: 404 Not Found");
             }
     }));
 
@@ -107,7 +107,7 @@ const Book = require("../models").Book;
                 await book.destroy();
                     res.redirect("/books");
             } else {
-                res.status(404).send("404 Not Found; not here, not lost; not yet made!");
+                res.status(404).send("ERROR: 404 Not Found");
             }
     }));
 
