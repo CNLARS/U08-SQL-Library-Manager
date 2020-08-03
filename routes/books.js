@@ -35,7 +35,7 @@ const Book = require("../models").Book;
             } catch(error){
                 if(error.name === "SequelizeValidationError") {
                     book = await Book.build(req.body);
-                    res.render("books/form-error", { book, errors: error.errors})
+                    res.render("books/new-book", { book, errors: error.errors})
                 } else {
                     throw error; //to asyncHandler to catch
                 } 
@@ -48,8 +48,6 @@ const Book = require("../models").Book;
     router.get("/:id", asyncHandler( async (req, res) => {
         const book = await Book.findByPk(req.params.id);     
             if(book){
-                console.log("Display Individual Book");
-                //Create pug file to render book details?
                 res.render("books/update-book", { book, title: book.title })
             } else {
             //If !Book.findByPk(req.params.id), no book found:
@@ -78,7 +76,7 @@ const Book = require("../models").Book;
                 if(error.name === "SequelizeValidationError"){
                     book = await Book.build(req.body);
                     book.id = req.params.id;
-                    res.render("books/form-error", {book, errors: error.errors, title: "Update Book" });
+                    res.render("books/update-book", {book, errors: error.errors, title: "Update Book" });
                 } else {
                     res.status(404).send("ERROR: 404 Not Found");
                 }

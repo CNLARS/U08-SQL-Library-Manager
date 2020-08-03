@@ -22,7 +22,7 @@ module.exports = (sequelize) => {
                 allowNull: false,
                 validate: {
                     notEmpty: {
-                        msg: "Author name is requested, and cannot be empty.",
+                        msg: "Please do include the Author.",
                     },
                     notNull: {
                         msg: "Every Book needs an Author, every Author needs a book.",

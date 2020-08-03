@@ -1,8 +1,28 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 26px "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+th {
+  color: white;
+  padding: 10px;
+  text-transform: uppercase;
+  text-shadow: 3px 3px 5px #000000;
+  background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+}
+/* Rainbow Text Source: https://w3bits.com/rainbow-text/ */
+
+h1 {
+  color: white;
+  padding: 10px;
+  text-shadow: 3px 3px 5px #000000;
+  background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
 }
 
 a {
-  color: #00B7FF;
+  color: deepskyblue;
+}
+
+a:hover {
+  color: midnightblue;
 }

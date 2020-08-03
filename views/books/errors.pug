@@ -1,0 +1,6 @@
+if(errors)
+  h2.errors Error, the following is requested:
+  ul.errors
+    each error in errors
+      li
+        =error.message
