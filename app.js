@@ -42,13 +42,12 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   
   if(res.status === 404){
-//     Note: Reference to the Practice Error Handling in Express Workshop
-    //  to avoid route specific rendering:
-        console.log("Testing404 Not Found");
+/* Note: Reference to the Practice Error Handling in Express Workshop
+      to avoid route specific rendering: */
     res.render("books/page-not-found", { book: {}, title: "Page Not Found" });
         } else {
                 // render the error page
-                    console.log("Error Testing123");
+                    // console.log("Error Testing123");
                 res.status(err.status || 500).render('error');
         }
 });

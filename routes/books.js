@@ -1,6 +1,4 @@
 const express = require("express");
-// const { endsWith } = require("sequelize/types/lib/operators");
-// const { RangeNotSatisfiable } = require("http-errors");
 const router = express.Router();
 const Book = require("../models").Book;
 
@@ -54,12 +52,6 @@ const Book = require("../models").Book;
                 res.status(404).send("ERROR: 404 Not Found");
             }
     }));
-
-// //GET Edits book details:
-//     router.get("/:id/edit", asyncHandler( async (req, res) => {
-//         const book = await Book.findByPk(req.params.id);     
-//             res.render("books/update-book", { book, title: book.title } );
-//     }));
 
 //POST Updates changes to book:
     router.post("/:id", asyncHandler(async (req, res) => {
