@@ -45,12 +45,7 @@ const Book = require("../models").Book;
 //GET Route for individual book by id to view/edit details:
     router.get("/:id", asyncHandler( async (req, res) => {
         const book = await Book.findByPk(req.params.id);     
-            if(book){
                 res.render("books/update-book", { book, title: book.title })
-            } else {
-            //If !Book.findByPk(req.params.id), no book found:
-                res.status(404).send("ERROR: 404 Not Found");
-            }
     }));
 
 //POST Updates changes to book:
